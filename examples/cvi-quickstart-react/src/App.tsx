@@ -13,10 +13,13 @@ function App() {
   const [conversation, setConversation] = useState<IConversation | null>(null)
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
+    useEffect(() => {
     return () => {
       if (conversation) {
-        void endConversation(conversation.conversation_id)
+        // Use suppressErrors=true during cleanup to prevent fetch errors during page unload
+        endConversation(conversation.conversation_id, true).catch(() => {
+          // Silently handle any remaining errors during cleanup
+        })
       }
     }
   }, [conversation])
