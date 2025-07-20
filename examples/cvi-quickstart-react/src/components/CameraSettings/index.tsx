@@ -59,15 +59,28 @@ export const CameraSettings = ({ actionLabel, onAction, cancelLabel, onCancel }:
   return (
     <div className='mt-10 relative w-full max-w-screen-md flex flex-col items-center justify-center mx-auto'>
       <div className='flex items-center justify-center'>
-        {getUserMediaError && (
-          <button
-            onClick={() => {
-              refreshDevices();
-            }}
-            className='px-6 py-2 rounded-button bg-primary text-slate-50'
-          >
-            Turn on Camera & Microphone
-          </button>
+                {getUserMediaError && (
+          <div className='text-center'>
+            <p className='text-red-600 mb-4'>Camera and microphone access is required</p>
+            <button
+              onClick={async () => {
+                try {
+                  await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: true
+                  });
+                  setGetUserMediaError(false);
+                  refreshDevices();
+                } catch (error) {
+                  console.error('Permission still denied:', error);
+                  alert('Please enable camera and microphone permissions in your browser settings and refresh the page.');
+                }
+              }}
+              className='px-6 py-2 rounded-md bg-primary text-slate-50 hover:bg-primary/90'
+            >
+              Turn on Camera & Microphone
+            </button>
+          </div>
         )}
 
 
