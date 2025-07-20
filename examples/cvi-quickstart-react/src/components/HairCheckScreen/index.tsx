@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDaily } from '@daily-co/daily-react';
 import { useLocalSessionId } from '@daily-co/daily-react';
 import { CameraSettings } from '../CameraSettings';
 import { Video } from '../Video';
+import { Button } from '../ui/button';
 
 export const HairCheckScreen = ({ handleJoin, handleEnd }:
   {
