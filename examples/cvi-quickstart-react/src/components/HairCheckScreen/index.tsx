@@ -57,8 +57,8 @@ export const HairCheckScreen = ({ handleJoin, handleEnd }:
     return (
       <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex flex-col items-center justify-center p-8'>
         <div className='max-w-md mx-auto text-center'>
-          <div className='inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl mb-6 shadow-xl'>
-            <Video className='w-10 h-10 text-white' />
+                    <div className='inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl mb-6 shadow-xl'>
+            <VideoIcon className='w-10 h-10 text-white' />
           </div>
 
           <h2 className='text-3xl font-bold text-gray-800 mb-4'>Camera & Microphone Access</h2>
