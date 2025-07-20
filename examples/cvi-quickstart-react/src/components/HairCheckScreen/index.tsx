@@ -4,6 +4,7 @@ import { useLocalSessionId } from '@daily-co/daily-react';
 import { CameraSettings } from '../CameraSettings';
 import { Video } from '../Video';
 import { Button } from '../ui/button';
+import { Video as VideoIcon } from 'lucide-react';
 
 export const HairCheckScreen = ({ handleJoin, handleEnd }:
   {
