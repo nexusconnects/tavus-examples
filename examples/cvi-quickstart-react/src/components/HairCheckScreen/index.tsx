@@ -13,11 +13,19 @@ export const HairCheckScreen = ({ handleJoin, handleEnd }:
   const localSessionId = useLocalSessionId();
   const daily = useDaily();
 
-  useEffect(() => {
+    useEffect(() => {
     if (daily) {
-      daily?.startCamera({ startVideoOff: false, startAudioOff: false });
+      console.log('Starting camera in hair check screen');
+      daily.startCamera({
+        startVideoOff: false,
+        startAudioOff: false
+      }).then(() => {
+        console.log('Camera started successfully');
+      }).catch((error) => {
+        console.error('Failed to start camera:', error);
+      });
     }
-  }, [daily, localSessionId]);
+  }, [daily]);
 
   return <div>
     <Video id={localSessionId} className='max-h-[70vh]' />
