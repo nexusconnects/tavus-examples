@@ -21,28 +21,9 @@ function App() {
     }
   }, [conversation])
 
-    const handleStart = async () => {
+      const handleStart = async () => {
     try {
       setLoading(true)
-
-      // Request camera and microphone permissions before creating conversation
-      try {
-        await navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: true
-        })
-        console.log('Camera and microphone permissions granted')
-      } catch (permissionError) {
-        console.error('Permission denied:', permissionError)
-        toast({
-          variant: "destructive",
-          title: "Camera & Microphone Access Required",
-          description: 'Please allow camera and microphone access to start the conversation',
-        })
-        setLoading(false)
-        return
-      }
-
       const conversation = await createConversation()
       setConversation(conversation)
       setScreen('hairCheck')
