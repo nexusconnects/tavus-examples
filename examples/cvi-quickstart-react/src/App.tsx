@@ -30,12 +30,29 @@ function App() {
       const conversation = await createConversation()
       setConversation(conversation)
       setScreen('hairCheck')
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error starting conversation:', error)
+
+      let title = "Connection Error"
+      let description = "Unable to start conversation"
+
+      if (error.message?.includes('401')) {
+        title = "Authentication Error"
+        description = "Invalid API key. Please check your configuration."
+      } else if (error.message?.includes('API key is not configured')) {
+        title = "Configuration Error"
+        description = "API key is missing. Please check your environment setup."
+      } else if (error.message?.includes('persona_id')) {
+        title = "Persona Error"
+        description = "Invalid persona configuration. Please check your persona ID."
+      } else if (error.message) {
+        description = error.message.split('\n')[0] // Show first line of error message
+      }
+
       toast({
         variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: 'Check console for details',
+        title,
+        description,
       })
     } finally {
       setLoading(false)
