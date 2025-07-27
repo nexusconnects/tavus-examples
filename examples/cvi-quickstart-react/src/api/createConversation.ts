@@ -31,13 +31,28 @@ export const createConversation = async (): Promise<IConversation> => {
 
     if (!response.ok) {
       let errorMessage = `HTTP error! status: ${response.status}`;
+      let errorDetails = '';
+
+      // Clone the response to read the body without consuming it
+      const responseClone = response.clone();
 
       try {
-        const errorData = await response.json();
+        const errorData = await responseClone.json();
         console.error('Error response:', errorData);
-        errorMessage += ` - ${errorData.message || errorData.error || 'Unknown error'}`;
+        errorDetails = errorData.message || errorData.error || errorData.detail || 'Unknown error';
+        errorMessage += ` - ${errorDetails}`;
       } catch (parseError) {
-        console.error('Could not parse error response:', parseError);
+        console.error('Could not parse error response as JSON, trying text:', parseError);
+        try {
+          const errorText = await response.text();
+          console.error('Error response text:', errorText);
+          if (errorText) {
+            errorDetails = errorText;
+            errorMessage += ` - ${errorText}`;
+          }
+        } catch (textError) {
+          console.error('Could not parse error response as text either:', textError);
+        }
       }
 
       if (response.status === 401) {
