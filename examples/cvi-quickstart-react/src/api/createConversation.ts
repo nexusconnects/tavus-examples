@@ -6,9 +6,15 @@ export const createConversation = async (): Promise<IConversation> => {
     // Debug logging
     console.log('API Key configured:', !!TAVUS_API_KEY);
     console.log('API Key length:', TAVUS_API_KEY?.length || 0);
+    console.log('API Key starts with:', TAVUS_API_KEY?.substring(0, 8) + '...');
 
     if (!TAVUS_API_KEY) {
       throw new Error('Tavus API key is not configured. Please check your .env file.');
+    }
+
+    // Validate API key format (basic check)
+    if (TAVUS_API_KEY.length < 20) {
+      throw new Error('API key appears to be too short. Please verify your API key.');
     }
 
     const requestBody = {
@@ -16,6 +22,7 @@ export const createConversation = async (): Promise<IConversation> => {
     };
 
     console.log('Creating conversation with:', requestBody);
+    console.log('API endpoint:', 'https://tavusapi.com/v2/conversations');
 
     const response = await fetch('https://tavusapi.com/v2/conversations', {
       method: 'POST',
@@ -27,6 +34,7 @@ export const createConversation = async (): Promise<IConversation> => {
     });
 
     console.log('Response status:', response.status);
+    console.log('Response status text:', response.statusText);
     console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 
     if (!response.ok) {
