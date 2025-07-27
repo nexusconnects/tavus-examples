@@ -3,25 +3,55 @@ import { IConversation } from '@/types';
 
 export const createConversation = async (): Promise<IConversation> => {
   try {
+    // Debug logging
+    console.log('API Key configured:', !!TAVUS_API_KEY);
+    console.log('API Key length:', TAVUS_API_KEY?.length || 0);
+
+    if (!TAVUS_API_KEY) {
+      throw new Error('Tavus API key is not configured. Please check your .env file.');
+    }
+
+    const requestBody = {
+      persona_id: 'p5170200c65c', // User's custom persona
+    };
+
+    console.log('Creating conversation with:', requestBody);
+
     const response = await fetch('https://tavusapi.com/v2/conversations', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': TAVUS_API_KEY,
       },
-            body: JSON.stringify({
-        persona_id: 'p5170200c65c', // User's custom persona
-      }),
+      body: JSON.stringify(requestBody),
     });
 
+    console.log('Response status:', response.status);
+    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      let errorMessage = `HTTP error! status: ${response.status}`;
+
+      try {
+        const errorData = await response.json();
+        console.error('Error response:', errorData);
+        errorMessage += ` - ${errorData.message || errorData.error || 'Unknown error'}`;
+      } catch (parseError) {
+        console.error('Could not parse error response:', parseError);
+      }
+
+      if (response.status === 401) {
+        errorMessage += '\n\nThis is an authentication error. Please check:\n1. Your API key is correct\n2. Your API key has not expired\n3. Your API key has the necessary permissions';
+      }
+
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
+    console.log('Conversation created successfully:', data);
     return data;
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error creating conversation:', error);
     throw error;
   }
 };
